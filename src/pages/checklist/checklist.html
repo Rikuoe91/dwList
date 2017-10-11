@@ -7,7 +7,7 @@
 <ion-header>
 
     <ion-navbar color="secondary">
-        <ion-title>Checklist Title</ion-title>
+        <ion-title>{{checklist.title}}</ion-title>
         <ion-buttons end>
             <button icon-only (click)="uncheckItem()">
                 <ion-icon name="refresh-circle">
@@ -25,18 +25,18 @@
 <ion-content>
 
     <ion-list no-lines>
-        <ion-item-sliding>
+        <ion-item-sliding *ngFor="let item of checklist.items">
             <ion-item>
-                <ion-label>Item Title</ion-label>
-                <ion-checkbox (click)="toggleItem()"></ion-checkbox>
+                <ion-label>{{item.title}}</ion-label>
+                <ion-checkbox [checked] (click)="toggleItem(item)"></ion-checkbox>
             </ion-item>
 
             <ion-item-options>
                 <button ion-button icon-only color="light" (click)="renameItem(item)">
-                    <ion-icon name="clipboard">edit</ion-icon>
+                    <ion-icon name="clipboard"></ion-icon>
                 </button>
                 <button ion-button icon-only color="danger" (click)="removeItem(item)">
-                    <ion-icon name="trash">Delete</ion-icon>
+                    <ion-icon name="trash"></ion-icon>
                 </button>
             </ion-item-options>
         </ion-item-sliding>

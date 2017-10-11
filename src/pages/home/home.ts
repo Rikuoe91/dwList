@@ -21,8 +21,33 @@ export class HomePage {
     }
 
     ionViewDidLoad() {
+        this.platform.ready().then(() => {
+
+            this.dataService.getData().then((checklists) => {
+
+                let savedChecklists: any = false;
+
+                if (typeof(checklists) != "undefined") {
+                    savedChecklists = JSON.parse(checklists)
+                }
+
+                if (savedChecklists) {
+
+                    savedChecklists.forEach((savedChecklists) => {
+                        let loadChecklist = new ChecklistModel(savedChecklists.title, savedChecklists.items);
+
+                        this.checkLists.push((loadChecklist));
+
+                        loadChecklist.checkListUpdate().subscribe(update => {
+                            this.save();
+                        })
+                    })
+                }
+            })
+        })
 
     }
+
 
     addChecklist(): void {
 
@@ -80,7 +105,7 @@ export class HomePage {
     }
 
     viewCheckList(checklist): void {
-        this.navCtrl.push('CheckListPage', {
+        this.navCtrl.push('ChecklistPage', {
             checklist: checklist
         })
     }
@@ -88,14 +113,15 @@ export class HomePage {
     removeCheckList(checklist): void {
         let index = this.checkLists.indexOf(checklist);
 
-        if (index>-1){
-            this.checkLists.splice(index,1);
+        if (index > -1) {
+            this.checkLists.splice(index, 1);
         }
 
     }
 
     save(): void {
-
+        this.keyboard.close();
+        this.dataService.save(this.checkLists)
     }
 
 
